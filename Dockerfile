@@ -36,6 +36,10 @@ RUN apt-get update && apt-get install -y \
   libxslt-dev \
   libyaml-dev \
   make \
+  ssh \
+  git \
+  time \
+  lsof \
   patch \
   xz-utils \
   zlib1g-dev
