@@ -65,9 +65,10 @@ RUN set -eux; \
   wget "$url"; \
   echo "${rustupSha256} *rustup-init" | sha256sum -c -; \
   chmod +x rustup-init; \
-  ./rustup-init -y --no-modify-path --default-toolchain 1.27.0; \
+  ./rustup-init -y --no-modify-path --default-toolchain 1.27.2; \
   rm rustup-init; \
   chmod -R a+w $RUSTUP_HOME $CARGO_HOME; \
   rustup --version; \
   cargo --version; \
-  rustc --version;
+  rustc --version; \
+  rustup component add rls-preview rust-src rust-analysis rustfmt-preview
