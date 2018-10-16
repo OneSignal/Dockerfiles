@@ -1,4 +1,4 @@
-FROM osig/rust-ubuntu:1.27
+FROM osig/rust-ubuntu:1.29
 
 # Cannot use OneSignal/openssl pre-built binary since it needs header files as well.
 RUN \
