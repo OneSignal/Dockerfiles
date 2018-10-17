@@ -22,6 +22,3 @@ RUN set -eux; \
   rustup --version; \
   cargo --version; \
   rustc --version; \
-  rustup component add rls-preview rust-src rust-analysis rustfmt-preview; \
-  rustup install nightly-2018-10-16; \
-  rustup component add rls-preview rust-src rust-analysis rustfmt-preview --toolchain nightly-2018-10-16; \

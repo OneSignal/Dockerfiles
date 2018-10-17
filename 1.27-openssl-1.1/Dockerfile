@@ -6,6 +6,3 @@ RUN \
     unzip OpenSSL_1_1_0-stable.zip && cd openssl-OpenSSL_1_1_0-stable && \
     ./config && make -j $(nproc) && make install
 ENV LD_LIBRARY_PATH /usr/local/lib
-
-# Required for setting up postgres schema on circleci
-RUN apt-get update && apt-get install -y postgresql
