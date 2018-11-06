@@ -7,6 +7,8 @@ set -e
 # Should not require user input if already logged in
 docker login
 
+export LC_ALL=C
+
 # `sort -r` => reverse sort so that 1.27.0 goes before 1.27.0-*
 # `sed 's|/||'` => remove trailing /
 for DIR in `/bin/ls -d */ | sort -r | sed 's|/||'`
