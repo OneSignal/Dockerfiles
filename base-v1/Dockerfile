@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
   automake \
   bzip2 \
   dpkg-dev \
+  curl \
   file \
   g++ \
   gcc \
