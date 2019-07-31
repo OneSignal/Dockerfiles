@@ -1,4 +1,4 @@
-FROM osig/rust-ubuntu:1.36
+FROM osig/rust-ubuntu:1.36-ruby-capnp
 
 # Cannot use OneSignal/openssl pre-built binary since it needs header files as well.
 RUN \
