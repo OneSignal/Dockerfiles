@@ -1,11 +1,13 @@
 FROM ubuntu:16.04
 
+# clang is installed to support building rdkafka crate
 RUN apt-get update && apt-get install -y \
   autoconf \
   automake \
   bzip2 \
-  dpkg-dev \
+  clang \
   curl \
+  dpkg-dev \
   file \
   g++ \
   gcc \
