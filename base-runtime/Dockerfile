@@ -21,4 +21,5 @@ ENTRYPOINT [ "/usr/bin/envoy-preflight" ]
 RUN apt-get update && apt-get install -y \
     libssl1.0.0 \
     libssl-dev \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
