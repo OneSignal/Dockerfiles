@@ -1,4 +1,4 @@
-FROM osig/rust-ubuntu:base-v1
+FROM osig/rust-ubuntu:base-v2
 
 RUN set -eux; \
   \
