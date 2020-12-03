@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Should not require user input if already logged in
+docker login
+
+cd "$(dirname "$0")/.."
+
+DIR="$1"
+GITTAG="$(git rev-parse --short HEAD)"
+
+find_dirs() {
+  local find_opts
+  find_opts=(
+    "."
+    -maxdepth 1
+    -type d
+    -not -name '.*'         # Exclude dot files
+    -not -path "**/.*"      # Exclude dot dirs
+    -not -path "./rust-ubuntu"
+    -not -path "./script"
+  )
+
+  find "${find_opts[@]}"
+}
+
+build_image() {
+    pushd $1 > /dev/null
+
+    # Tag with VERSION file if present, otherwise fall back to git hash
+    if [[ -f VERSION ]]; then
+        TAG=`cat VERSION`
+    else
+        TAG=$GITTAG
+    fi
+
+    IMAGE="osig/$DIR:$TAG"
+    echo $IMAGE
+    docker build -t $IMAGE .
+    docker push $IMAGE
+
+    popd > /dev/null
+}
+
+if [[ "$#" = 1 ]]; then
+    build_image $1
+else
+    # sed removes leading './'
+    for DIR in `find_dirs | sed 's|./||'`
+    do
+        build_image $DIR
+    done
+fi
