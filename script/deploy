@@ -8,37 +8,40 @@ docker login
 cd "$(dirname "$0")/.."
 
 DIR="$1"
-GITTAG="$(git rev-parse --short HEAD)"
+GITTAG="$(git rev-parse HEAD)"
 
 find_dirs() {
-  local find_opts
-  find_opts=(
-    "."
-    -maxdepth 1
-    -type d
-    -not -name '.*'         # Exclude dot files
-    -not -path "**/.*"      # Exclude dot dirs
-    -not -path "./rust-ubuntu"
-    -not -path "./script"
-  )
+    local find_opts
+    find_opts=(
+        "."
+        -type d
+        -not -name '.*'         # Exclude dot files
+        -not -path "**/.*"      # Exclude dot dirs
+        -not -path "./script"
+    )
 
-  find "${find_opts[@]}"
+    find "${find_opts[@]}"
 }
 
 build_image() {
     pushd $1 > /dev/null
 
-    # Tag with VERSION file if present, otherwise fall back to git hash
-    if [[ -f VERSION ]]; then
-        TAG=`cat VERSION`
-    else
-        TAG=$GITTAG
-    fi
+    if [[ -f Dockerfile ]]; then
+        # Tag with VERSION file if present, otherwise fall back to git hash
+        if [[ -f VERSION ]]; then
+            TAG=`cat VERSION`
+        else
+            TAG=$GITTAG
+        fi
 
-    IMAGE="osig/$DIR:$TAG"
-    echo $IMAGE
-    docker build -t $IMAGE .
-    docker push $IMAGE
+        # sed removes everything after the first /
+        # e.g. rust-ubuntu/base-runtime -> rust-ubuntu
+        REPO=`echo $1 | sed 's|/.*||'`
+        IMAGE="osig/$REPO:$TAG"
+        echo $IMAGE
+        docker build -t $IMAGE .
+        docker push $IMAGE
+    fi
 
     popd > /dev/null
 }
