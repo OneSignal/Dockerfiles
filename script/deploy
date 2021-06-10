@@ -24,23 +24,26 @@ find_dirs() {
 }
 
 build_image() {
-    pushd $1 > /dev/null
+    pushd "$1" > /dev/null
 
     if [[ -f Dockerfile ]]; then
         # Tag with VERSION file if present, otherwise fall back to git hash
         if [[ -f VERSION ]]; then
-            TAG=`cat VERSION`
+            TAG="$(cat VERSION)"
         else
-            TAG=$GITTAG
+            TAG="$GITTAG"
         fi
 
         # sed removes everything after the first /
         # e.g. rust-ubuntu/base-runtime -> rust-ubuntu
-        REPO=`echo $1 | sed 's|/.*||'`
+        REPO="$(echo $1 | sed 's|/.*||')"
         IMAGE="osig/$REPO:$TAG"
-        echo $IMAGE
-        docker build -t $IMAGE .
-        docker push $IMAGE
+        echo "$IMAGE"
+        docker build -t "$IMAGE" .
+
+        if [[ -z $SKIP_DOCKER_PUSH ]]; then
+          docker push "$IMAGE"
+        fi
     fi
 
     popd > /dev/null
@@ -50,8 +53,8 @@ if [[ "$#" = 1 ]]; then
     build_image $1
 else
     # sed removes leading './'
-    for DIR in `find_dirs | sed 's|./||'`
+    for DIR in $(find_dirs | sed 's|./||')
     do
-        build_image $DIR
+        build_image "$DIR"
     done
 fi
