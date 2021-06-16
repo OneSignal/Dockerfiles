@@ -5,7 +5,7 @@ WORKDIR /barman
 CMD /barman/entrypoint.sh
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates wget gnupg2 && \
+    apt-get install -y --no-install-recommends ca-certificates wget gnupg2 procps vim && \
     rm -rf /var/lib/apt/lists/*
 
 # Install SuperCronic a Cron replacement which is able to run as non-root user
@@ -23,7 +23,7 @@ RUN wget "$SUPERCRONIC_URL" \
 RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add - && \
     sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' && \
     apt-get update && \
-    apt-get install -y --no-install-recommends postgresql-client-10 barman=2.12-1.pgdg100+1 && \
+    apt-get install -y --no-install-recommends postgresql-client-10 barman=2.12-1.pgdg100+1 barman-cli-cloud=2.12-1.pgdg100+1&& \
     rm -rf /var/lib/apt/lists/*
 
 COPY crontab /barman/crontab
@@ -41,4 +41,3 @@ RUN mkdir /barman/postgres && \
     chown -R +5000:+5000 /etc/cron.d && \
     chown +5000:+5000 /etc/barman.conf && \
     chown -R +5000:+5000 /etc/barman.d
-#    chmod 0755 /etc/barman.conf && \
