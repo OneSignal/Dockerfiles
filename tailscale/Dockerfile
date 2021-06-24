@@ -7,10 +7,11 @@ WORKDIR /app/
 
 RUN apt-get update -y && \
     apt-get install -y curl gpg && \
-    curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.gpg | apt-key add - && \
-    curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.list | tee /etc/apt/sources.list.d/tailscale.list && \
+    curl -fsSL https://pkgs.tailscale.com/stable/debian/buster.gpg | apt-key add - && \
+    curl -fsSL https://pkgs.tailscale.com/stable/debian/buster.list | tee /etc/apt/sources.list.d/tailscale.list && \
     apt-get update -y && \
-    apt-get install -y tailscale=1.8.7
+    apt-get install --no-install-recommends -y tailscale=1.8.7 && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY ./entrypoint.sh /app/entrypoint.sh
 
